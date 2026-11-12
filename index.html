@@ -186,6 +186,22 @@ svg text{fill:var(--muted);font-family:var(--body)}
 .fx{font-size:.93rem;line-height:1.4}
 .watch{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.95rem;background:rgba(255,255,255,.07);border-radius:10px;padding:10px 12px}
 .watch .lbl{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.7);font-weight:700;width:100%}
+.mx th,.mx td{text-align:center;padding:7px 6px}
+.mx th:first-child,.mx td:first-child{text-align:left;position:sticky;left:0;background:var(--surface);z-index:1}
+.mx .n{color:var(--muted);opacity:.6}
+.mx .hot{background:var(--red-soft);color:var(--red);font-weight:800;border-radius:6px}
+.mx .pen{display:block;font-size:.68rem;color:var(--loss);line-height:1}
+.mx thead th{line-height:1.15}
+.mx thead small{display:block;font-weight:600;text-transform:none;letter-spacing:0}
+.hzrow{display:grid;grid-template-columns:110px 1fr 90px;gap:10px;align-items:center;font-size:.93rem}
+.hzbar{display:flex;height:22px;border-radius:6px;overflow:hidden;background:var(--line)}
+.hzbar i{display:grid;place-items:center;font-style:normal;font-size:.75rem;font-weight:700;color:#fff}
+.hzbar .f{background:var(--red)}.hzbar .a{background:var(--loss)}
+.duel{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:640px){.duel{grid-template-columns:1fr}}
+.spt .li{grid-template-columns:1fr auto 1fr;text-align:center}
+.spt .li .h{text-align:right}.spt .li .g{text-align:left}
+.spt .ht{display:block;font-size:.75rem;color:var(--muted)}
 footer{max-width:1180px;margin:0 auto;padding:0 16px 32px;color:var(--muted);font-size:.85rem}
 @media (max-width:520px){.brand h1{font-size:1.6rem}.crest{width:46px;height:46px;font-size:1rem}.side .nm{font-size:1.05rem}.vsmid .when{font-size:1.9rem}.side .ini{width:48px;height:48px;font-size:1.1rem}.podium{grid-template-columns:1fr}}
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
@@ -219,7 +235,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 16px 32px;color:var(--muted);fon
   <a href="https://hbde-live.liga.nu/nuScoreLive/#/groups/489649">Liveticker während der Spiele</a>
 </footer>
 
-<!-- LIGADATEN: werden automatisch aus nuLiga aktualisiert. matches: [Nr, Datum, Zeit, Halle, Heim, Gast, ToreHeim, ToreGast]; games: {Spielnummer: {Teamkürzel: [[Rückennummer, "Vorname Nachname", Tore, 7m-Tore, 7m-Versuche, Zeitstrafen], …]}} aus den offiziellen Spielberichten -->
+<!-- LIGADATEN: werden automatisch aus nuLiga aktualisiert. matches: [Nr, Datum, Zeit, Halle, Heim, Gast, ToreHeim, ToreGast]; games: {Spielnummer: {Teamkürzel: [[Rückennummer, "Vorname Nachname", Tore, 7m-Tore, 7m-Versuche, Zeitstrafen], …]}}; half: {Spielnummer: [HalbzeitHeim, HalbzeitGast]} – alles aus den offiziellen Spielberichten -->
 <script id="league" type="application/json">{"updated":"2026-11-12T17:50","matches":[
 ["21001", "2026-09-06", "15:00", "813141", "DEL", "GEE", 33, 31],
 ["21002", "2026-09-06", "16:00", "606107", "LIG", "ALT", 18, 26],
@@ -337,7 +353,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 16px 32px;color:var(--muted);fon
 "21024":{"GEE":[["3","Lya Kamp",2,0,0,0],["4","Amelie Baude",1,1,2,0],["8","Carina Hallmann",4,0,0,1],["11","Leni Meyberk",4,0,0,1],["12","Monique Jung",0,0,0,0],["13","Hannah Schröder",1,0,0,0],["15","Katharina Vuik",12,3,3,1],["25","Annika Hallmann",3,2,4,0],["27","Delia Meyer",0,0,0,0],["28","Amélie Gagelmann",4,0,0,0],["33","Karina Baldaeus",0,0,0,0],["55","Lena König",4,0,0,0],["71","Jule Askamp",0,0,0,0],["92","Svea Hämmerling",1,0,0,0],["95","Lenja Catharina Reichstein",1,0,0,1]],"LIG":[["1","Carolin Oelze",0,0,0,0],["3","Sina Hartenberger",1,0,0,0],["4","Lene Elise Brüning",12,1,2,0],["6","Johanna-Marie Kersting",4,0,0,0],["7","Hanna Schnaars",2,0,0,0],["9","Jasmin Reslan",1,0,0,0],["10","Insa Bloß",1,0,0,0],["11","Nele Waterkamp",0,0,0,1],["14","Judith Ullrich",5,0,0,0],["22","Angelina Schulaew",1,0,1,0],["30","Juliane Maria Kersting",8,3,4,0],["33","Leni Hoffmann",2,0,0,0],["34","Swantje Bahrenburg",0,0,0,0],["51","Linn Greta Ueckert",2,0,0,2],["75","Daria Chernenko",0,0,0,0],["79","Mareike Pape",0,0,0,0]]},
 "21025":{"SCH":[["6","Sina Zwirlein",0,0,0,0],["7","Kristin Knapp",0,0,0,1],["8","Camille-Chantal Olsowski",1,0,0,1],["9","Annie Naumann",3,0,0,0],["11","Kira Hinz",0,0,0,0],["13","Pia Dorothea Heller",0,0,0,0],["14","Vivien Rönnefahrt",1,0,0,0],["15","Marlene Hohmann",0,0,0,0],["16","Anika Brunne",7,6,7,1],["20","Jennifer Döscher",1,0,0,0],["22","Lizzy Taubert",4,0,0,0],["25","Mariella Hartmann",4,0,0,0],["27","Lea Marie von Glahn",2,0,0,0]],"DEL":[["1","Laura Schwarze",0,0,0,0],["3","Emma Schwiderski",5,2,3,0],["7","Jennifer Kulikow",0,0,0,0],["8","Tonja Rais",1,0,0,0],["9","Alicia Preetz",4,0,0,1],["10","Taina Liske",2,0,0,0],["11","Vanessa Barghop",1,0,0,0],["17","Kyra Wessels",3,0,1,0],["19","Kyra Dietz",6,3,5,0],["30","Nele Stadtsholte",1,0,0,0]]},
 "21026":{"ALT":[["1","Kimberley von Rönn",0,0,0,0],["2","Laura Kühne",1,0,0,0],["4","Lea Stammer",7,2,3,0],["5","Kira Döhring",2,0,0,0],["6","Talina Ostara Steffens",0,0,0,1],["7","Franziska Hunold",0,0,0,0],["9","Aileen Kirchner",0,0,0,0],["10","Kacy Boigk",0,0,0,0],["11","Jeanne Elisa Breuer",4,0,0,0],["13","Sarah Linh Giesche",1,0,0,0],["15","Katharina Meyer",1,0,0,0],["20","Jasmin Weissbrodt",0,0,0,0],["24","Laura Ernst",2,0,0,1],["99","Sina Paape",3,3,3,0]],"LOX":[["1","Kristin Tritschler",0,0,0,0],["8","Merle Nitzsche",2,0,0,1],["12","Daniela Pech-Rydygerova",0,0,0,0],["13","Kim Lana Nitzsche",5,1,2,0],["17","Lisa Struppe",2,0,0,0],["19","Alina Heyer",7,0,0,0],["21","Stefanie Ocken",0,0,0,0],["23","Lina Wagner",2,0,0,0],["27","Stephanie Drath",0,0,0,0],["55","Nanke Brüning",1,0,0,0],["81","Anna Loos",7,4,4,1]]}
-}}</script>
+},"half":{"21001": [20, 15], "21002": [10, 15], "21003": [15, 15], "21004": [17, 12], "21005": [14, 5], "21006": [14, 16], "21007": [14, 14], "21008": [14, 7], "21009": [15, 13], "21010": [21, 18], "21011": [22, 11], "21012": [19, 14], "21013": [10, 22], "21014": [22, 17], "21015": [8, 12], "21016": [15, 15], "21017": [12, 14], "21018": [15, 14], "21019": [13, 15], "21020": [11, 10], "21021": [17, 8], "21023": [19, 16], "21024": [20, 20], "21025": [9, 13], "21026": [11, 15]}}</script>
 
 <!-- TEAMDATEN: werden jede Nacht aus der internen Eingabeseite übernommen. -->
 <script id="state" type="application/json">{"players":[],"manual":{},"trainings":[],"results":{}}</script>
@@ -451,9 +467,85 @@ function facts(c){
   var hm=[],aw=[];teamGames(c).forEach(function(m){if(!m.played)return;(m.h===c?hm:aw).push(m.h===c?m.hg:m.ag);});
   function avg(a){return a.reduce(function(s,x){return s+x;},0)/a.length;}
   if(hm.length&&aw.length&&Math.abs(avg(hm)-avg(aw))>=4)F.push([avg(hm)>avg(aw)?"Heimstark":"Auswärts gefährlicher",'Zu Hause Ø '+de(avg(hm))+' Tore, auswärts Ø '+de(avg(aw))+'.']);
-  return F.slice(0,4);
+  var hs=halfStats(c);if(hs.n>=3){var d1=(hs.h1f-hs.h1a)/hs.n,d2=(hs.h2f-hs.h2a)/hs.n;
+    if(d2-d1<=-3)F.push(["Lässt nach der Pause nach","1. Halbzeit Ø "+(d1>=0?"+":"−")+de(Math.abs(d1))+", 2. Halbzeit Ø "+(d2>=0?"+":"−")+de(Math.abs(d2))+" Tore Differenz."]);
+    else if(d2-d1>=3)F.push(["Stark nach der Pause","1. Halbzeit Ø "+(d1>=0?"+":"−")+de(Math.abs(d1))+", 2. Halbzeit Ø "+(d2>=0?"+":"−")+de(Math.abs(d2))+" Tore Differenz."]);
+    if(hs.leadL>=1)F.push(["Führung nicht sicher",hs.leadL+"× trotz Halbzeitführung noch verloren."]);
+    else if(hs.turn>=2)F.push(["Comeback-Qualität",hs.turn+"× nach Halbzeitrückstand noch gedreht."]);}
+  return F.slice(0,5);
 }
 function factsHtml(F){return '<div class="facts">'+F.map(function(f,i){return '<div class="fact"><span class="fi num">'+(i+1)+'</span><div><div class="ft">'+f[0]+'</div><div class="fx">'+f[1]+'</div></div></div>';}).join("")+'</div>';}
+
+/* ---------- Halbzeit, Spieltag, Torjägerliste, Duelle ---------- */
+var HALF=LEAGUE.half||{};
+function halfStats(c){
+  var r={n:0,h1f:0,h1a:0,h2f:0,h2a:0,lead:0,leadW:0,leadL:0,behind:0,turn:0,list:[]};
+  teamGames(c).forEach(function(m){var h=HALF[m.nr];if(!m.played||!h)return;
+    var home=m.h===c,hf=home?h[0]:h[1],ha=home?h[1]:h[0],ff=home?m.hg:m.ag,fa=home?m.ag:m.hg;
+    r.n++;r.h1f+=hf;r.h1a+=ha;r.h2f+=ff-hf;r.h2a+=fa-ha;
+    if(hf>ha){r.lead++;if(ff>fa)r.leadW++;if(ff<fa)r.leadL++;}
+    if(hf<ha){r.behind++;if(ff>=fa)r.turn++;}
+    r.list.push({m:m,hf:hf,ha:ha,ff:ff,fa:fa});});
+  return r;
+}
+function hzBar(f,a){var t=f+a||1;return '<div class="hzbar"><i class="f" style="width:'+(f*100/t)+'%">'+de(f)+'</i><i class="a" style="width:'+(a*100/t)+'%">'+de(a)+'</i></div>';}
+function halfCard(c,cls){
+  var s=halfStats(c);if(!s.n)return '';
+  var d1=(s.h1f-s.h1a)/s.n,d2=(s.h2f-s.h2a)/s.n;function sg(x){return (x>0?"+":x<0?"−":"±")+de(Math.abs(x));}
+  var h='<section class="card '+cls+'"><h2>Halbzeit-Analyse</h2>'+
+    '<div class="list" style="gap:10px"><div class="hzrow"><b>1. Halbzeit</b>'+hzBar(s.h1f/s.n,s.h1a/s.n)+'<span class="num r">Ø '+sg(d1)+'</span></div>'+
+    '<div class="hzrow"><b>2. Halbzeit</b>'+hzBar(s.h2f/s.n,s.h2a/s.n)+'<span class="num r">Ø '+sg(d2)+'</span></div></div>'+
+    '<div class="legend"><span style="--c:var(--red)">eigene Tore Ø</span><span style="--c:var(--loss)">Gegentore Ø</span></div>'+
+    '<div class="small">Zur Pause geführt: <b>'+s.lead+'×</b>'+(s.lead?' (davon '+s.leadW+' gewonnen'+(s.leadL?', '+s.leadL+' noch verloren':'')+')':'')+' · Zur Pause hinten: <b>'+s.behind+'×</b>'+(s.behind?' (davon '+s.turn+' noch gedreht)':'')+'</div>'+
+    '<div class="table-wrap"><table><thead><tr><th>Datum</th><th>Gegner</th><th class="c">Halbzeit</th><th class="c">Ende</th><th class="c">2. HZ</th></tr></thead><tbody>'+
+    s.list.slice().reverse().map(function(x){var o=outcome(x.m,c),d=(x.ff-x.hf)-(x.fa-x.ha);return '<tr><td class="num">'+short(x.m.date)+'</td><td>'+(x.m.h===c?"vs. ":"bei ")+esc(TEAMS[opp(x.m,c)])+'</td><td class="c num">'+x.hf+':'+x.ha+'</td><td class="c num"><span class="res-'+o+'" style="color:'+(o==="S"?"var(--win)":o==="N"?"var(--ink)":"var(--draw)")+'">'+x.ff+':'+x.fa+'</span></td><td class="c num">'+(x.ff-x.hf)+':'+(x.fa-x.ha)+'</td></tr>';}).join("")+
+    '</tbody></table></div><div class="hint">„2. HZ“ = Tore nur in der zweiten Halbzeit.</div></section>';
+  return h;
+}
+function matrixCard(){
+  var gl=matches().filter(function(m){return (m.h==="ALT"||m.g==="ALT")&&m.played&&LEAGUE.games&&LEAGUE.games[m.nr]&&LEAGUE.games[m.nr].ALT;});
+  if(!gl.length)return '';
+  var P=players().filter(function(p){return gl.some(function(m){return LEAGUE.games[m.nr].ALT.some(function(r){return r[1]===p.name;});});}).sort(function(a,b){return (b.goals||0)-(a.goals||0);});
+  var h='<section class="card c12"><h2>Tore pro Spiel</h2><div class="table-wrap"><table class="mx"><thead><tr><th>Spielerin</th>'+
+    gl.map(function(m){var o=outcome(m,"ALT");return '<th class="num">'+INI[opp(m,"ALT")]+'<small>'+short(m.date)+'</small><span class="chip '+o+'" style="width:auto;padding:0 4px;height:18px;margin-top:3px">'+scoreFor(m,"ALT")+'</span></th>';}).join("")+'<th>Σ</th></tr></thead><tbody>'+
+    P.map(function(p){return '<tr><td>'+nrTag("ALT",p.name)+esc(p.name)+'</td>'+gl.map(function(m){var r=LEAGUE.games[m.nr].ALT.filter(function(x){return x[1]===p.name;})[0];
+      if(!r)return '<td class="n" title="nicht im Kader">·</td>';
+      return '<td class="num" title="'+r[2]+' Tore'+(r[4]?', 7m '+r[3]+'/'+r[4]:'')+(r[5]?', '+r[5]+'× 2 Min':'')+'"><span class="'+(r[2]>=5?"hot":"")+'" style="padding:2px 6px">'+r[2]+'</span>'+(r[5]?'<span class="pen">'+Array(r[5]+1).join("▮")+'</span>':'')+'</td>';}).join("")+'<td class="num"><b>'+(p.goals||0)+'</b></td></tr>';}).join("")+
+    '</tbody></table></div><div class="hint">Zahl = Tore im Spiel, rot hinterlegt ab 5 Toren. ▮ = Zeitstrafe. · = nicht im Kader. Mit der Maus auf einen Wert zeigen für 7m und Strafen.</div></section>';
+  return h;
+}
+function duelCard(c){
+  var gl=matches().filter(function(m){return m.played&&((m.h==="ALT"&&m.g===c)||(m.g==="ALT"&&m.h===c));});
+  if(!gl.length)return '';
+  return gl.map(function(m,i){var o=outcome(m,"ALT"),hf=HALF[m.nr],G=(LEAGUE.games||{})[m.nr]||{};
+    function side(t){var rows=(G[t]||[]).filter(function(r){return r[2]>0||r[5]>0;}).sort(function(a,b){return b[2]-a[2];});
+      return '<div><h3>'+esc(TEAMS[t])+'</h3><div class="table-wrap"><table><tbody>'+(rows.length?rows.map(function(r){return '<tr><td>'+(r[0]?'<span class="nr">'+esc(r[0])+'</span>':'')+esc(r[1])+'</td><td class="r num"><b>'+r[2]+'</b></td><td class="r num small">'+(r[4]?'7m '+r[3]+'/'+r[4]:'')+'</td><td class="r small" style="color:var(--loss)">'+(r[5]?r[5]+'× 2\'':'')+'</td></tr>';}).join(""):'<tr><td class="muted">Kein Spielbericht</td></tr>')+'</tbody></table></div></div>';}
+    return '<section class="card c12"><h2>'+(gl.length>1?(i===0?"Hinspiel":"Rückspiel"):"Hinspiel")+' · '+fmtDate(m.date)+'</h2>'+
+      '<div class="toolbar"><span class="score num '+o+'">'+m.hg+':'+m.ag+'</span><span>'+esc(TEAMS[m.h])+' gegen '+esc(TEAMS[m.g])+(hf?' · Halbzeit '+hf[0]+':'+hf[1]:'')+'</span></div>'+
+      '<div class="duel">'+side(c)+side("ALT")+'</div><div class="hint">Torschützinnen und Zeitstrafen aus dem Spielbericht.</div></section>';}).join("");
+}
+function scorerCard(){
+  var L=LEAGUE.goals.slice().sort(function(a,b){return b[3]-a[3]||a[2]-b[2];}),rank=0,prev=null;
+  L.forEach(function(x,i){if(x[3]!==prev){rank=i+1;prev=x[3];}x.rk=rank;});
+  var sv={};(LEAGUE.seven||[]).forEach(function(x){sv[x[0]+"|"+x[1]]=x[2]+"/"+x[3];});
+  var top=L.slice(0,20),ours=L.filter(function(x,i){return i>=20&&x[0]==="ALT"&&x[3]>0;});
+  function row(x){return '<tr'+(x[0]==="ALT"?' class="hl"':'')+'><td class="c num">'+x.rk+'.</td><td>'+nrTag(x[0],x[1])+esc(x[1])+'</td><td>'+esc(TEAMS[x[0]])+'</td><td class="r num">'+x[2]+'</td><td class="r num"><b>'+x[3]+'</b></td><td class="r num">'+de(x[3]/x[2])+'</td><td class="r num">'+(sv[x[0]+"|"+x[1]]||"–")+'</td></tr>';}
+  return '<section class="card c12"><h2>Torjägerinnen der Liga</h2><div class="table-wrap"><table><thead><tr><th class="c">Platz</th><th>Spielerin</th><th>Team</th><th class="r">Sp</th><th class="r">Tore</th><th class="r">Ø</th><th class="r">7m</th></tr></thead><tbody>'+
+    top.map(row).join("")+(ours.length?'<tr><td colspan="7" class="small muted" style="padding-top:14px">Weitere Altenwalderinnen</td></tr>'+ours.map(row).join(""):'')+
+    '</tbody></table></div><div class="hint">Aus allen Spielberichten der Liga. Altenwalde hervorgehoben.</div></section>';
+}
+function weekendOf(list,anchor){var t=new Date(anchor+"T12:00").getTime();return list.filter(function(m){var d=new Date(m.date+"T12:00").getTime();return Math.abs(d-t)<=3*864e5;});}
+function spieltagCards(){
+  var all=matches(),pl=all.filter(function(m){return m.played;}),up=all.filter(function(m){return !m.played;});
+  function li(m,showHT){var hf=HALF[m.nr],me=m.h==="ALT"||m.g==="ALT";
+    return '<div class="li"'+(me?' style="background:var(--row-hl);border-radius:8px;padding:10px 8px"':'')+'><span class="h">'+esc(TEAMS[m.h])+'</span><span class="num">'+(m.played?'<b>'+m.hg+':'+m.ag+'</b>'+(showHT&&hf?'<span class="ht">('+hf[0]+':'+hf[1]+')</span>':''):'<span class="small muted">'+WD[dt(m).getDay()]+' '+short(m.date)+'<br>'+m.time+'</span>')+'</span><span class="g">'+esc(TEAMS[m.g])+'</span></div>';}
+  var h='';
+  if(pl.length){var last=weekendOf(pl,pl[pl.length-1].date);
+    h+='<section class="card c6 spt"><h2>Letzter Spieltag</h2><div class="small muted">'+short(last[0].date)+' bis '+short(last[last.length-1].date)+' · Halbzeit in Klammern</div><div class="list">'+last.map(function(m){return li(m,true);}).join("")+'</div></section>';}
+  if(up.length){var nx=weekendOf(up,up[0].date);
+    h+='<section class="card c6 spt"><h2>Nächster Spieltag</h2><div class="small muted">'+short(nx[0].date)+' bis '+short(nx[nx.length-1].date)+'</div><div class="list">'+nx.map(function(m){return li(m,false);}).join("")+'</div></section>';}
+  return h;
+}
 function trainingPct(name){var n=state.trainings.length;if(!n)return null;var c=state.trainings.filter(function(t){return t.present.indexOf(name)>=0;}).length;return Math.round(c*100/n);}
 
 /* ---------- Bausteine ---------- */
@@ -494,6 +586,7 @@ function viewStart(){
   var up=matches().filter(function(m){return (m.h==="ALT"||m.g==="ALT")&&!m.played;}).slice(0,5);
   h+='<section class="card c7"><h2>Die nächsten Spiele</h2><div class="list">'+up.map(function(m){return gameLi(m);}).join("")+'</div><a href="#spielplan" class="small">Ganzer Spielplan</a></section>';
   h+='<section class="card c5"><h2>Tabelle</h2>'+tableHtml(rows,true)+'<a href="#tabelle" class="small">Tabelle mit allen Spalten</a></section>';
+  h+=spieltagCards();
   var last=matches().filter(function(m){return (m.h==="ALT"||m.g==="ALT")&&m.played;}).slice(-5).reverse();
   h+='<section class="card c12"><h2>Letzte Ergebnisse</h2><div class="list">'+last.map(function(m){return gameLi(m);}).join("")+'</div></section>';
   return h+'</div>';
@@ -502,7 +595,7 @@ function viewStart(){
 /* ---------- Tabelle ---------- */
 function viewTabelle(){
   return '<div class="grid"><section class="card c12"><h2>Regionsoberliga Frauen Nord</h2>'+tableHtml(standings(),false)+
-    '<div class="hint">Klick auf eine Mannschaft öffnet ihre Gegneranalyse. Sieg 2 Punkte, Unentschieden 1 Punkt. <a href="https://hvnb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=HRBN+26%2F27&group=489649">Offizielle Tabelle bei nuLiga</a></div></section></div>';
+    '<div class="hint">Klick auf eine Mannschaft öffnet ihre Gegneranalyse. Sieg 2 Punkte, Unentschieden 1 Punkt. <a href="https://hvnb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBDE.woa/wa/groupPage?championship=HRBN+26%2F27&group=489649">Offizielle Tabelle bei nuLiga</a></div></section>'+scorerCard()+'</div>';
 }
 
 /* ---------- Team intern ---------- */
@@ -544,6 +637,7 @@ function viewTeam(){
     '<div class="hint"><b>Toranteil</b> = wie viel Prozent aller Tore der Mannschaft diese Spielerin geworfen hat ('+teamGoals+' Tore gesamt). Beispiel: '+(top[0]?esc(top[0].name)+' hat '+top[0].goals+' von '+teamGoals+' Toren geworfen, also '+Math.round(top[0].goals*100/teamGoals)+' %.':'')+
     ' Alle Werte werden direkt aus den offiziellen Spielberichten bei nuLiga berechnet: Spiele = Einsätze laut Spielbericht.' +(PUBLIC?'':' Wo „–“ steht, könnt ihr den Wert im Bearbeiten-Modus nachtragen (mit * markiert).')+'</div></section>';
 
+  h+=matrixCard()+halfCard("ALT","c12");
   // Zeitstrafen
   var pen=P.filter(function(p){return p.two>0;}).sort(function(a,b){return b.two-a.two;}),maxP=Math.max.apply(null,pen.map(function(p){return p.two;}))||1;
   h+='<section class="card '+(PUBLIC?"c6":"c5")+'"><h2>2-Minuten-Strafen</h2><div class="list" style="gap:9px">'+pen.map(function(p){return '<div class="barrow"><span>'+esc(p.name)+'</span><div class="bar"><i style="width:'+(p.two*100/maxP)+'%;background:var(--loss)"></i></div><span class="num r">'+p.two+'×</span></div>';}).join("")+'</div></section>';
@@ -585,6 +679,7 @@ function viewGegner(){
   h+='<section class="card c3">'+kpi("",r.sp?de(r.tk/r.sp):"–","Gegentore pro Spiel ("+r.tk+" gesamt)")+'</section>';
   var F=facts(c);
   if(F.length)h+='<section class="card c12"><h2>Gut zu wissen</h2>'+factsHtml(F)+'</section>';
+  h+=duelCard(c);
   h+='<section class="card c7"><h2>Letzte Ergebnisse</h2>'+(played.length?chart(played,c):'<div class="empty">Noch keine Spiele.</div>')+
     '<div class="list">'+played.slice().reverse().map(function(m){return gameLi(m,c);}).join("")+'</div></section>';
   var sc=LEAGUE.goals.filter(function(x){return x[0]===c;}).sort(function(a,b){return b[3]-a[3];}),tot=r.tg||1;
@@ -595,8 +690,9 @@ function viewGegner(){
     '</tbody></table></div><div class="hint">Top 3 hervorgehoben. Rückennummer laut letztem Einsatz. 7m = verwandelt/geworfen. Anteil = Anteil an allen Toren dieser Mannschaft.</div>';
   var su=LEAGUE.susp.filter(function(x){return x[0]===c;}).sort(function(a,b){return b[3]-a[3];}),suTot=su.reduce(function(s,x){return s+x[3];},0);
   h+='<h3>Zeitstrafen</h3><div class="small">'+suTot+' Zeitstrafen in '+r.sp+' Spielen'+(su.length?'. Am häufigsten: '+su.slice(0,3).map(function(x){return nrTag(c,x[1])+esc(x[1])+" ("+x[3]+"×)";}).join(", "):"")+'</div></section>';
+  h+=halfCard(c,"c12");
   var h2h=games.filter(function(m){return m.h==="ALT"||m.g==="ALT";});
-  h+='<section class="card c12"><h2>Direkter Vergleich mit uns</h2><div class="list">'+h2h.map(function(m){return gameLi(m);}).join("")+'</div></section>';
+  h+='<section class="card c12"><h2>Alle Duelle mit uns</h2><div class="list">'+h2h.map(function(m){return gameLi(m);}).join("")+'</div></section>';
   return h+'</div>';
 }
 function chart(played,c){
