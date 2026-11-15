@@ -322,12 +322,12 @@ svg text{fill:var(--muted);font-family:var(--body)}
 .lc-info{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.82rem}
 .lc-info .lbl{display:block;font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
 .lc-foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:.78rem;color:var(--muted);border-top:1px solid var(--line);padding-top:8px}
-.lc-ticker{order:3;padding:0 14px 14px;display:flex;flex-direction:column;gap:8px}
+.lc-ticker{order:3;padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px}
 .lc-th{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
 .lc-th .btn{margin-left:auto}
 .lt-wrap{background:#fff;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
 .lt{display:block;width:100%;height:640px;border:0}
-@media (max-width:640px){.lc-ticker{order:2;padding-top:10px}.lc-grid{order:3}.lt{height:540px}.lc-grid{padding:10px;grid-template-columns:1fr}.lc-ticker{padding:0 10px 10px}}
+@media (max-width:640px){.lc-ticker{order:2}.lc-grid{order:3}.lt{height:540px}.lc-grid{padding:10px;grid-template-columns:1fr}.lc-ticker{padding:12px 10px 10px}}
 footer{max-width:1180px;margin:0 auto;padding:0 16px 32px;color:var(--muted);font-size:.85rem}
 @media (max-width:520px){.brand h1{font-size:1.6rem}.crest{width:46px;height:46px;font-size:1rem}.side .nm{font-size:1.05rem}.vsmid .when{font-size:1.9rem}.side .ini{width:48px;height:48px;font-size:1.1rem}.podium{grid-template-columns:1fr}}
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
@@ -909,9 +909,9 @@ function lcCard(m){
 function liveBanner(){
   var T=matches().filter(function(m){return dayState(m);});if(!T.length)return '';
   T.sort(function(a,b){var ma=(a.h==="ALT"||a.g==="ALT")?0:1,mb=(b.h==="ALT"||b.g==="ALT")?0:1;return ma-mb||(a.date+a.time).localeCompare(b.date+b.time);});
-  var anyLive=T.some(function(m){return dayState(m)==="live";}),showTicker=T.some(function(m){var s=dayState(m);return s==="live"||s==="post";});
+  var anyLive=T.some(function(m){return dayState(m)==="live";}),showTicker=embedOK()||T.some(function(m){var s=dayState(m);return s==="live"||s==="post";});
   var h='<section class="c12 lc" id="live"><div class="lc-head"><h2>'+(anyLive?'Live-Center':'Heute im Spiel')+'</h2><span class="small">'+T.length+(T.length===1?' Spiel':' Spiele')+' heute · '+fmtDate(todayISO(),true)+'</span></div>'+
-    '<div class="lc-grid">'+T.map(lcCard).join("")+'</div>';
+    (embedOK()?'':'<div class="lc-grid">'+T.map(lcCard).join("")+'</div>');
   if(showTicker){
     h+=embedOK()?
       '<div class="lc-ticker"><div class="lc-th"><b>Spielstände und Tore live</b><span class="small muted">Offizieller nuLiga-Liveticker · aktualisiert sich selbst</span><button class="btn" data-act="tkFull">Groß anzeigen</button></div>'+
