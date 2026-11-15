@@ -587,16 +587,27 @@ function scorerCard(){
     top.map(row).join("")+(ours.length?'<tr><td colspan="7" class="small muted" style="padding-top:14px">Weitere Altenwalderinnen</td></tr>'+ours.map(row).join(""):'')+
     '</tbody></table></div><div class="hint">Aus allen Spielberichten der Liga. Altenwalde hervorgehoben.</div></section>';
 }
-function weekendOf(list,anchor){var t=new Date(anchor+"T12:00").getTime();return list.filter(function(m){var d=new Date(m.date+"T12:00").getTime();return Math.abs(d-t)<=3*864e5;});}
+function spieltage(){
+  var all=matches(),groups=[];
+  all.forEach(function(m){var t=new Date(m.date+"T12:00").getTime(),g=groups[groups.length-1];
+    if(g&&t-g.start<=3*864e5)g.list.push(m);else groups.push({start:t,list:[m]});});
+  return groups;
+}
 function spieltagCards(){
-  var all=matches(),pl=all.filter(function(m){return m.played;}),up=all.filter(function(m){return !m.played;});
+  var G=spieltage(),lastPlayed=-1,firstOpen=-1;
+  G.forEach(function(g,i){if(g.list.some(function(m){return m.played;}))lastPlayed=i;if(firstOpen<0&&g.list.some(function(m){return !m.played;}))firstOpen=i;});
+  if(ui.sp==null||ui.sp<0||ui.sp>=G.length)ui.sp=lastPlayed>=0?lastPlayed:0;
   function li(m,showHT){var hf=HALF[m.nr],me=m.h==="ALT"||m.g==="ALT";
     return '<div class="li"'+(m.played?' data-game="'+m.nr+'" tabindex="0" role="button" title="Spielverlauf anzeigen"':'')+(me?' style="background:var(--row-hl);border-radius:8px;padding:10px 8px"':'')+'><span class="h">'+esc(TEAMS[m.h])+'</span><span class="num">'+(m.played?'<b>'+m.hg+':'+m.ag+'</b>'+(showHT&&hf?'<span class="ht">('+hf[0]+':'+hf[1]+')</span>':''):'<span class="small muted">'+WD[dt(m).getDay()]+' '+short(m.date)+'<br>'+m.time+'</span>')+'</span><span class="g">'+esc(TEAMS[m.g])+'</span></div>';}
-  var h='';
-  if(pl.length){var last=weekendOf(pl,pl[pl.length-1].date);
-    h+='<section class="card c6 spt"><h2>Letzter Spieltag</h2><div class="small muted">'+short(last[0].date)+' bis '+short(last[last.length-1].date)+' · Halbzeit in Klammern · Spiel anklicken für den Verlauf</div><div class="list">'+last.map(function(m){return li(m,true);}).join("")+'</div></section>';}
-  if(up.length){var nx=weekendOf(up,up[0].date);
-    h+='<section class="card c6 spt"><h2>Nächster Spieltag</h2><div class="small muted">'+short(nx[0].date)+' bis '+short(nx[nx.length-1].date)+'</div><div class="list">'+nx.map(function(m){return li(m,false);}).join("")+'</div></section>';}
+  function range(g){var a=g.list[0].date,b=g.list[g.list.length-1].date;return short(a)+(a!==b?' bis '+short(b):'');}
+  var g=G[ui.sp],h='';
+  h+='<section class="card c6 spt"><div class="toolbar" style="justify-content:space-between"><h2>'+(ui.sp===lastPlayed?'Letzter Spieltag':'Spieltag')+'</h2><div class="toolbar">'+
+    '<button class="btn" data-act="spPrev" aria-label="Vorheriger Spieltag"'+(ui.sp<=0?' disabled':'')+'>◀</button>'+
+    '<select id="spSel" aria-label="Wochenende wählen">'+G.map(function(x,i){return '<option value="'+i+'"'+(i===ui.sp?' selected':'')+'>'+range(x)+' · '+x.list.length+(x.list.length===1?' Spiel':' Spiele')+'</option>';}).join("")+'</select>'+
+    '<button class="btn" data-act="spNext" aria-label="Nächster Spieltag"'+(ui.sp>=G.length-1?' disabled':'')+'>▶</button></div></div>'+
+    '<div class="small muted">'+range(g)+' · Halbzeit in Klammern · Spiel anklicken für den Verlauf</div><div class="list">'+g.list.map(function(m){return li(m,true);}).join("")+'</div></section>';
+  if(firstOpen>=0){var nx=G[firstOpen];
+    h+='<section class="card c6 spt"><h2>Nächster Spieltag</h2><div class="small muted">'+range(nx)+'</div><div class="list">'+nx.list.filter(function(m){return !m.played;}).map(function(m){return li(m,false);}).join("")+'</div></section>';}
   return h;
 }
 
@@ -870,6 +881,8 @@ document.addEventListener("click",function(e){
   if(a==="toggleEdit"){editing=!editing;render();}
   else if(a==="planOwn"){ui.planAll=false;render();}
   else if(a==="planAll"){ui.planAll=true;render();}
+  else if(a==="spPrev"){ui.sp--;render();}
+  else if(a==="spNext"){ui.sp++;render();}
   else if(a==="allOn"||a==="allOff"){document.querySelectorAll(".checks input").forEach(function(c){c.checked=a==="allOn";});}
   else if(a==="addTraining"){var d=document.getElementById("tDate").value,msg=document.getElementById("tMsg");
     if(!d){msg.textContent="Bitte ein Datum wählen.";return;}
@@ -883,6 +896,7 @@ document.addEventListener("click",function(e){
 });
 document.addEventListener("change",function(e){var t=e.target;
   if(t.id==="oppSel"){ui.opp=t.value;render();return;}
+  if(t.id==="spSel"){ui.sp=+t.value;render();return;}
   var v=t.value===""?null:Math.max(0,parseInt(t.value,10)||0);
   if(t.hasAttribute("data-pname")){var n=t.getAttribute("data-pname");state.manual[n]=state.manual[n]||{};state.manual[n][t.getAttribute("data-k")]=v;change(true);return;}
   if(t.hasAttribute("data-m")){var nr=t.getAttribute("data-m"),r=state.results[nr]||[null,null];r[+t.getAttribute("data-side")]=v;
