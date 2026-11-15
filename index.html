@@ -910,21 +910,14 @@ function lcCard(m){
     '<div class="lc-info"><div><span class="lbl">Gefährlichste</span>'+top(m.h)+'</div><div><span class="lbl">Gefährlichste</span>'+top(m.g)+'</div></div>'+
     '<div class="lc-foot"><span>'+(/^Halle \d+$/.test(hallName(m.hall))?'':esc(hallName(m.hall)))+'</span>'+(duel?'<span>Hinspiel: <button type="button" class="gm-link" data-game="'+duel.nr+'">'+esc(INI[duel.h])+' '+duel.hg+':'+duel.ag+' '+esc(INI[duel.g])+'</button></span>':'')+'</div></div>';
 }
-var tkOpen=false;
 function liveBanner(){
-  var T=matches().filter(function(m){return dayState(m);});if(!T.length)return '';
-  var L=T.filter(function(m){return dayState(m)==="live";}),P=T.filter(function(m){return dayState(m)==="pre";}).sort(function(a,b){return a.time.localeCompare(b.time);});
-  if(!L.length){
-    var txt=P.length?'Nächster Anpfiff heute <b>'+P[0].time+' Uhr</b> · '+esc(TEAMS[P[0].h])+' – '+esc(TEAMS[P[0].g]):'Alle Spiele von heute sind beendet · Ergebnisse kommen heute Abend';
-    var h='<section class="c12 lc-mini" id="live"><span class="lc-dot"></span><span>'+txt+'</span>'+(embedOK()?'<button class="btn" data-act="tkToggle">'+(tkOpen?'Ticker ausblenden':'Ticker anzeigen')+'</button>':'<a class="btn" href="'+TICKER+'" target="_blank" rel="noopener">Ticker öffnen</a>')+'</section>';
-    if(tkOpen&&embedOK())h+='<section class="c12 lc"><div class="lc-ticker"><div class="lt-wrap"><iframe class="lt" src="'+TICKER+'" title="nuLiga-Liveticker"></iframe></div></div></section>';
-    return h;}
+  var L=matches().filter(function(m){return dayState(m)==="live";});if(!L.length)return '';
   var h='<section class="c12 lc" id="live"><div class="lc-head"><h2>Live-Center</h2><span class="small">'+L.map(function(m){return esc(INI[m.h])+' – '+esc(INI[m.g]);}).join(" · ")+'</span></div>';
   h+=embedOK()?
     '<div class="lc-ticker"><div class="lc-th"><b>Spielstände und Tore live</b><span class="small muted">Offizieller nuLiga-Liveticker · aktualisiert sich selbst</span><button class="btn" data-act="tkFull">Groß anzeigen</button></div>'+
     '<div class="lt-wrap"><iframe class="lt" src="'+TICKER+'" title="nuLiga-Liveticker" loading="lazy"></iframe></div>'+
     '<div class="small muted">Im Ticker nach unten scrollen: Erst kommt der letzte Spieltag, darunter die Spiele von heute. Spielstände gibt es, wenn der Heimverein live erfasst.</div></div>'
-    :'<div class="lc-grid">'+L.map(lcCard).join("")+'</div><div class="lc-ticker"><a class="btn primary" href="'+TICKER+'" target="_blank" rel="noopener">Spielstände im nuLiga-Liveticker</a></div>';
+    :'<div class="lc-ticker"><a class="btn primary" href="'+TICKER+'" target="_blank" rel="noopener">Spielstände im nuLiga-Liveticker</a></div>';
   return h+'</section>';
 }
 function tickerFull(){showModal('<div class="gm-head" style="padding:12px 16px"><button class="gm-close" data-act="gmClose" aria-label="Schließen">✕</button><div class="eyebrow">Liveticker · Regionsoberliga Frauen Nord</div></div><iframe src="'+TICKER+'" title="nuLiga-Liveticker" style="width:100%;height:calc(100vh - 110px);border:0;display:block;background:#fff"></iframe>',"Liveticker");}
