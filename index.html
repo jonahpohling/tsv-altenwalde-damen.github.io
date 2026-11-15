@@ -263,7 +263,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 16px 32px;color:var(--muted);fon
 </footer>
 
 <!-- LIGADATEN: werden automatisch aus nuLiga aktualisiert. matches: [Nr, Datum, Zeit, Halle, Heim, Gast, ToreHeim, ToreGast]; games: {Spielnummer: {Teamkürzel: [[Rückennummer, "Vorname Nachname", Tore, 7m-Tore, 7m-Versuche, Zeitstrafen], …]}}; half: {Spielnummer: [HalbzeitHeim, HalbzeitGast]}; ev: {Spielnummer: "Seite,Zeit,Stand,Ereignis,Nr|…"} (Ereignis: T Tor, 7 7m-Tor, 7x 7m verworfen, 2 Zeitstrafe, Y Gelb, R Rot, AH/AG Auszeit) – alles aus den offiziellen Spielberichten -->
-<script id="league" type="application/json">{"updated":"2026-11-12T17:50","matches":[
+<script id="league" type="application/json">{"updated":"2026-11-15T11:52","matches":[
 ["21001", "2026-09-06", "15:00", "813141", "DEL", "GEE", 33, 31],
 ["21002", "2026-09-06", "16:00", "606107", "LIG", "ALT", 18, 26],
 ["21004", "2026-09-13", "16:00", "813141", "DEL", "HAB", 34, 20],
@@ -861,7 +861,7 @@ function render(){
   var k=route();
   document.querySelectorAll("#nav a").forEach(function(a){a.setAttribute("aria-current",a.getAttribute("href")==="#"+k?"page":"false");});
   var u=LEAGUE.updated||"";
-  document.getElementById("stand").innerHTML='<span title="Ligadaten werden jeden Abend automatisch aus nuLiga übernommen"><span class="dot"></span>Ligadaten vom '+fmtDate(u)+(u.length>10?", "+u.slice(11,16)+" Uhr":"")+'</span>'+
+  document.getElementById("stand").innerHTML='<span title="Wird jeden Abend automatisch aus nuLiga aktualisiert, sobald es neue Ergebnisse gibt"><span class="dot"></span>Letzte Aktualisierung: '+fmtDate(u)+(u.length>10?", "+u.slice(11,16)+" Uhr":"")+'</span>'+
     (artifactApi?'<button class="hbtn" data-act="toggleEdit">'+(editing?"Fertig":"Bearbeiten")+'</button>':'');
   var html=VIEWS[k]();
   if(dirty||saveMsg)html+='<div class="savebar"><span>'+(saveMsg||"Ungespeicherte Änderungen")+'</span>'+(dirty?'<button class="btn primary" data-act="save"'+(saving?" disabled":"")+'>'+(saving?"Speichert …":"Speichern")+'</button>':'')+'</div>';
