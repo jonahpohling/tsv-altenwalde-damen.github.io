@@ -304,6 +304,10 @@ svg text{fill:var(--muted);font-family:var(--body)}
 .live::before{content:"";width:8px;height:8px;border-radius:50%;background:#fff;animation:lp 1.2s ease-in-out infinite}
 @keyframes lp{0%,100%{opacity:1}50%{opacity:.25}}
 .lc{background:var(--surface);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+.lc-mini{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--surface);border-radius:12px;box-shadow:var(--shadow);padding:10px 14px;font-size:.9rem}
+.lc-mini .btn{margin-left:auto}
+.lc-mini>span:nth-child(2){flex:1 1 180px}
+.lc-dot{width:9px;height:9px;border-radius:50%;background:var(--red);flex:none}
 .lc-head{order:1;background:linear-gradient(135deg,var(--red),var(--red-deep));color:#fff;padding:12px 16px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px}
 .lc-head h2{font-size:1.4rem;color:#fff}
 .lc-grid{order:2;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;padding:14px}
@@ -906,19 +910,21 @@ function lcCard(m){
     '<div class="lc-info"><div><span class="lbl">Gefährlichste</span>'+top(m.h)+'</div><div><span class="lbl">Gefährlichste</span>'+top(m.g)+'</div></div>'+
     '<div class="lc-foot"><span>'+(/^Halle \d+$/.test(hallName(m.hall))?'':esc(hallName(m.hall)))+'</span>'+(duel?'<span>Hinspiel: <button type="button" class="gm-link" data-game="'+duel.nr+'">'+esc(INI[duel.h])+' '+duel.hg+':'+duel.ag+' '+esc(INI[duel.g])+'</button></span>':'')+'</div></div>';
 }
+var tkOpen=false;
 function liveBanner(){
   var T=matches().filter(function(m){return dayState(m);});if(!T.length)return '';
-  T.sort(function(a,b){var ma=(a.h==="ALT"||a.g==="ALT")?0:1,mb=(b.h==="ALT"||b.g==="ALT")?0:1;return ma-mb||(a.date+a.time).localeCompare(b.date+b.time);});
-  var anyLive=T.some(function(m){return dayState(m)==="live";}),showTicker=embedOK()||T.some(function(m){var s=dayState(m);return s==="live"||s==="post";});
-  var h='<section class="c12 lc" id="live"><div class="lc-head"><h2>'+(anyLive?'Live-Center':'Heute im Spiel')+'</h2><span class="small">'+T.length+(T.length===1?' Spiel':' Spiele')+' heute · '+fmtDate(todayISO(),true)+'</span></div>'+
-    (embedOK()?'':'<div class="lc-grid">'+T.map(lcCard).join("")+'</div>');
-  if(showTicker){
-    h+=embedOK()?
-      '<div class="lc-ticker"><div class="lc-th"><b>Spielstände und Tore live</b><span class="small muted">Offizieller nuLiga-Liveticker · aktualisiert sich selbst</span><button class="btn" data-act="tkFull">Groß anzeigen</button></div>'+
-      '<div class="lt-wrap"><iframe class="lt" id="ltFrame" src="'+TICKER+'" title="nuLiga-Liveticker" loading="lazy"></iframe></div>'+
-      '<div class="small muted">Im Ticker nach unten scrollen: Erst kommt der letzte Spieltag, darunter die Spiele von heute. Spielstände gibt es, wenn der Heimverein live erfasst.</div></div>'
-      :'<div class="lc-ticker"><a class="btn primary" href="'+TICKER+'" target="_blank" rel="noopener">Spielstände im nuLiga-Liveticker</a></div>';
-  }
+  var L=T.filter(function(m){return dayState(m)==="live";}),P=T.filter(function(m){return dayState(m)==="pre";}).sort(function(a,b){return a.time.localeCompare(b.time);});
+  if(!L.length){
+    var txt=P.length?'Nächster Anpfiff heute <b>'+P[0].time+' Uhr</b> · '+esc(TEAMS[P[0].h])+' – '+esc(TEAMS[P[0].g]):'Alle Spiele von heute sind beendet · Ergebnisse kommen heute Abend';
+    var h='<section class="c12 lc-mini" id="live"><span class="lc-dot"></span><span>'+txt+'</span>'+(embedOK()?'<button class="btn" data-act="tkToggle">'+(tkOpen?'Ticker ausblenden':'Ticker anzeigen')+'</button>':'<a class="btn" href="'+TICKER+'" target="_blank" rel="noopener">Ticker öffnen</a>')+'</section>';
+    if(tkOpen&&embedOK())h+='<section class="c12 lc"><div class="lc-ticker"><div class="lt-wrap"><iframe class="lt" src="'+TICKER+'" title="nuLiga-Liveticker"></iframe></div></div></section>';
+    return h;}
+  var h='<section class="c12 lc" id="live"><div class="lc-head"><h2>Live-Center</h2><span class="small">'+L.map(function(m){return esc(INI[m.h])+' – '+esc(INI[m.g]);}).join(" · ")+'</span></div>';
+  h+=embedOK()?
+    '<div class="lc-ticker"><div class="lc-th"><b>Spielstände und Tore live</b><span class="small muted">Offizieller nuLiga-Liveticker · aktualisiert sich selbst</span><button class="btn" data-act="tkFull">Groß anzeigen</button></div>'+
+    '<div class="lt-wrap"><iframe class="lt" src="'+TICKER+'" title="nuLiga-Liveticker" loading="lazy"></iframe></div>'+
+    '<div class="small muted">Im Ticker nach unten scrollen: Erst kommt der letzte Spieltag, darunter die Spiele von heute. Spielstände gibt es, wenn der Heimverein live erfasst.</div></div>'
+    :'<div class="lc-grid">'+L.map(lcCard).join("")+'</div><div class="lc-ticker"><a class="btn primary" href="'+TICKER+'" target="_blank" rel="noopener">Spielstände im nuLiga-Liveticker</a></div>';
   return h+'</section>';
 }
 function tickerFull(){showModal('<div class="gm-head" style="padding:12px 16px"><button class="gm-close" data-act="gmClose" aria-label="Schließen">✕</button><div class="eyebrow">Liveticker · Regionsoberliga Frauen Nord</div></div><iframe src="'+TICKER+'" title="nuLiga-Liveticker" style="width:100%;height:calc(100vh - 110px);border:0;display:block;background:#fff"></iframe>',"Liveticker");}
@@ -1138,6 +1144,7 @@ document.addEventListener("click",function(e){
   else if(a==="vbCopy"||a==="vbLink"){var gx=nextGame(),txt=a==="vbCopy"?vbText(opp(gx,"ALT"),gx)+"\nMehr: "+location.href.split("#")[0]+"#vorbericht":location.href.split("#")[0]+"#vorbericht",mg=document.getElementById("vbMsg");
     try{navigator.clipboard.writeText(txt).then(function(){mg.textContent="Kopiert.";},function(){mg.textContent="Kopieren nicht möglich. Bitte Text markieren und kopieren.";});}catch(er){mg.textContent="Kopieren nicht möglich.";}}
   else if(a==="tkFull"){tickerFull();}
+  else if(a==="tkToggle"){tkOpen=!tkOpen;var y=window.scrollY;render();window.scrollTo(0,y);}
   else if(a==="vbPrint"){try{window.print();}catch(er){}}
   else if(a==="spPrev"){ui.sp--;render();}
   else if(a==="spNext"){ui.sp++;render();}
