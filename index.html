@@ -300,6 +300,13 @@ svg text{fill:var(--muted);font-family:var(--body)}
   .card{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
   main{padding:0}
 }
+.live{display:inline-flex;align-items:center;gap:6px;background:var(--red);color:#fff!important;font-weight:800;border-radius:999px;padding:3px 11px;font-size:.78rem;text-decoration:none;letter-spacing:.06em;white-space:nowrap}
+.live::before{content:"";width:8px;height:8px;border-radius:50%;background:#fff;animation:lp 1.2s ease-in-out infinite}
+@keyframes lp{0%,100%{opacity:1}50%{opacity:.25}}
+.live-banner{background:var(--red);color:#fff;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.live-banner a{color:#fff}
+.live-banner .lg{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:center;background:rgba(255,255,255,.12);border-radius:10px;padding:8px 12px;font-weight:600}
+.live-banner .lg .tk{background:#fff;color:var(--red);border-radius:999px;padding:4px 12px;font-weight:800;text-decoration:none;font-size:.85rem}
 footer{max-width:1180px;margin:0 auto;padding:0 16px 32px;color:var(--muted);font-size:.85rem}
 @media (max-width:520px){.brand h1{font-size:1.6rem}.crest{width:46px;height:46px;font-size:1rem}.side .nm{font-size:1.05rem}.vsmid .when{font-size:1.9rem}.side .ini{width:48px;height:48px;font-size:1.1rem}.podium{grid-template-columns:1fr}}
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
@@ -677,7 +684,7 @@ function spieltagCards(){
   G.forEach(function(g,i){if(g.list.some(function(m){return m.played;}))lastPlayed=i;if(firstOpen<0&&g.list.some(function(m){return !m.played;}))firstOpen=i;});
   if(ui.sp==null||ui.sp<0||ui.sp>=G.length)ui.sp=lastPlayed>=0?lastPlayed:0;
   function li(m,showHT){var hf=HALF[m.nr],me=m.h==="ALT"||m.g==="ALT";
-    return '<div class="li"'+(m.played?' data-game="'+m.nr+'" tabindex="0" role="button" title="Spielverlauf anzeigen"':'')+(me?' style="background:var(--row-hl);border-radius:8px;padding:10px 8px"':'')+'><span class="h">'+esc(TEAMS[m.h])+'</span><span class="num">'+(m.played?'<b>'+m.hg+':'+m.ag+'</b>'+(showHT&&hf?'<span class="ht">('+hf[0]+':'+hf[1]+')</span>':''):'<span class="small muted">'+WD[dt(m).getDay()]+' '+short(m.date)+'<br>'+m.time+'</span>')+'</span><span class="g">'+esc(TEAMS[m.g])+'</span></div>';}
+    return '<div class="li"'+(m.played?' data-game="'+m.nr+'" tabindex="0" role="button" title="Spielverlauf anzeigen"':'')+(me?' style="background:var(--row-hl);border-radius:8px;padding:10px 8px"':'')+'><span class="h">'+esc(TEAMS[m.h])+'</span><span class="num">'+(m.played?'<b>'+m.hg+':'+m.ag+'</b>'+(showHT&&hf?'<span class="ht">('+hf[0]+':'+hf[1]+')</span>':''):(isLive(m)?liveTag():'<span class="small muted">'+WD[dt(m).getDay()]+' '+short(m.date)+'<br>'+m.time+'</span>'))+'</span><span class="g">'+esc(TEAMS[m.g])+'</span></div>';}
   function range(g){var a=g.list[0].date,b=g.list[g.list.length-1].date;return short(a)+(a!==b?' bis '+short(b):'');}
   var g=G[ui.sp],h='';
   h+='<section class="card c6 spt"><div class="toolbar" style="justify-content:space-between"><h2>'+(ui.sp===lastPlayed?'Letzter Spieltag':'Spieltag')+'</h2><div class="toolbar">'+
@@ -827,9 +834,13 @@ function viewVorbericht(){
   var g=nextGame();if(!g)return '<div class="grid"><section class="card c12"><div class="empty">Kein anstehendes Spiel.</div></section></div>';
   var c=opp(g,"ALT"),r=row(c),me=row("ALT"),home=g.h==="ALT",days=Math.round((new Date(g.date+"T00:00")-new Date(new Date().toDateString()))/864e5);
   var sc=LEAGUE.goals.filter(function(x){return x[0]===c;}).sort(function(a,b){return b[3]-a[3];}).slice(0,5),tot=r.tg||1;
+  if(isLive(g))return '<div class="grid">'+liveBanner()+'</div>'+viewVorberichtBody(g,c,r,me,home,days,sc,tot);
+  return viewVorberichtBody(g,c,r,me,home,days,sc,tot);
+}
+function viewVorberichtBody(g,c,r,me,home,days,sc,tot){
   var sv=(LEAGUE.seven||[]).filter(function(x){return x[0]===c;}).sort(function(a,b){return b[3]-a[3];});
   var h='<div class="grid">';
-  h+='<section class="card match c12"><div class="eyebrow">Vorbericht · '+(home?"Heimspiel":"Auswärtsspiel")+' · '+(days<=0?"heute":days===1?"morgen":"in "+days+" Tagen")+'</div>'+
+  h+='<section class="card match c12"><div class="eyebrow">Vorbericht · '+(home?"Heimspiel":"Auswärtsspiel")+' · '+(isLive(g)?'läuft gerade':(days<=0?"heute":days===1?"morgen":"in "+days+" Tagen"))+'</div>'+
     '<div class="versus"><div class="side'+(g.h==="ALT"?" us":"")+'"><span class="ini">'+INI[g.h]+'</span><span class="nm">'+esc(TEAMS[g.h])+'</span><span class="small muted">Platz '+row(g.h).rank+' · '+formChips(row(g.h).form)+'</span></div>'+
     '<div class="vsmid"><span class="when num">'+g.time+'</span><span class="date num">'+fmtDate(g.date,true)+'</span></div>'+
     '<div class="side'+(g.g==="ALT"?" us":"")+'"><span class="ini">'+INI[g.g]+'</span><span class="nm">'+esc(TEAMS[g.g])+'</span><span class="small muted">Platz '+row(g.g).rank+' · '+formChips(row(g.g).form)+'</span></div></div>'+
@@ -846,6 +857,18 @@ function viewVorbericht(){
   h+='<section class="card c12"><a href="#gegner" data-opp="'+c+'">Komplette Gegneranalyse öffnen</a></section>';
   return h+'</div>';
 }
+
+/* ---------- Live ---------- */
+var TICKER="https://hbde-live.liga.nu/nuScoreLive/#/groups/489649";
+function isLive(m){if(m.played)return false;var t=dt(m).getTime(),n=Date.now();return n>=t-10*60e3&&n<=t+130*60e3;}
+function liveTag(){return '<a class="live" href="'+TICKER+'" target="_blank" rel="noopener" title="Offiziellen nuLiga-Liveticker öffnen">LIVE</a>';}
+function liveGames(){return matches().filter(isLive);}
+function liveBanner(){var L=liveGames();if(!L.length)return '';
+  return '<section class="c12 live-banner"><div class="eyebrow" style="color:#fff;opacity:.9">● Gerade live</div>'+L.map(function(m){var me=m.h==="ALT"||m.g==="ALT";
+    return '<div class="lg"'+(me?' style="background:rgba(255,255,255,.25)"':'')+'><span>'+esc(TEAMS[m.h])+' – '+esc(TEAMS[m.g])+' <span style="opacity:.8;font-weight:400">· '+m.time+' Uhr</span></span><a class="tk" href="'+TICKER+'" target="_blank" rel="noopener">Liveticker öffnen</a></div>';}).join("")+
+    '<div class="small" style="opacity:.85">Spielstand in Echtzeit im offiziellen nuLiga-Liveticker, sofern der Heimverein live erfasst. Endergebnis und Statistiken erscheinen hier am Abend.</div></section>';}
+var lastLiveKey=null;
+setInterval(function(){var k=liveGames().map(function(m){return m.nr;}).join(",");if(lastLiveKey!==null&&k!==lastLiveKey&&!document.getElementById("gmWrap")){var y=window.scrollY;render();window.scrollTo(0,y);}lastLiveKey=k;},60000);
 function trainingPct(name){var n=state.trainings.length;if(!n)return null;var c=state.trainings.filter(function(t){return t.present.indexOf(name)>=0;}).length;return Math.round(c*100/n);}
 
 /* ---------- Bausteine ---------- */
@@ -853,7 +876,7 @@ function kpi(cls,v,l){return '<div class="kpi '+cls+'"><span class="v num">'+esc
 function cal(m){return '<div class="cal"><b>'+WD[dt(m).getDay()]+'</b><span class="num">'+m.date.slice(8,10)+'.'+m.date.slice(5,7)+'.</span><small>'+m.time+'</small></div>';}
 function gameLi(m,c){c=c||"ALT";var home=m.h===c,o=opp(m,c),oc=outcome(m,c);
   return '<div class="li">'+cal(m)+'<div class="t"><span class="o">'+(home?"vs. ":"bei ")+esc(TEAMS[o])+' <span class="pill'+(home?' home':'')+'">'+(home?"Heim":"Auswärts")+'</span></span><span class="small muted">'+esc(hallName(m.hall))+'</span></div>'+
-    (m.played?'<span class="score num '+oc+'" data-game="'+m.nr+'" tabindex="0" role="button" title="Spielverlauf anzeigen · '+({S:"Sieg",U:"Unentschieden",N:"Niederlage"})[oc]+(m.own?" (selbst eingetragen)":"")+'">'+scoreFor(m,c)+'</span>':'<span class="score open">offen</span>')+'</div>';}
+    (m.played?'<span class="score num '+oc+'" data-game="'+m.nr+'" tabindex="0" role="button" title="Spielverlauf anzeigen · '+({S:"Sieg",U:"Unentschieden",N:"Niederlage"})[oc]+(m.own?" (selbst eingetragen)":"")+'">'+scoreFor(m,c)+'</span>':(isLive(m)?liveTag():'<span class="score open">offen</span>'))+'</div>';}
 
 function tableHtml(rows,compact){
   var h='<div class="table-wrap"><table><thead><tr><th class="c">#</th><th>Mannschaft</th><th class="r">Sp</th>'+(compact?'':'<th class="r hide-sm">S</th><th class="r hide-sm">U</th><th class="r hide-sm">N</th><th class="r hide-sm">Tore</th>')+'<th class="r">Diff</th><th class="r">Punkte</th>'+(compact?'':'<th>Form</th>')+'</tr></thead><tbody>';
@@ -867,12 +890,12 @@ function tableHtml(rows,compact){
 /* ---------- Start ---------- */
 function viewStart(){
   var g=nextGame(),rows=standings(),me=rows.filter(function(r){return r.code==="ALT";})[0];
-  var h='<div class="grid">';
+  var h='<div class="grid">'+liveBanner();
   if(g){
     var o=opp(g,"ALT"),home=g.h==="ALT",days=Math.round((new Date(g.date+"T00:00")-new Date(new Date().toDateString()))/864e5),or=rows.filter(function(r){return r.code===o;})[0];
     function side(c){return '<div class="side'+(c==="ALT"?" us":"")+'"><span class="ini">'+INI[c]+'</span><span class="nm">'+esc(TEAMS[c])+'</span></div>';}
     h+='<section class="card match c8"><div class="eyebrow">Nächstes Spiel · '+(home?"Heimspiel":"Auswärtsspiel")+'</div>'+
-      '<div class="versus">'+side(g.h)+'<div class="vsmid"><span class="count">'+(days<=0?"Heute":days===1?"Morgen":"in "+days+" Tagen")+'</span><span class="when num">'+g.time+'</span><span class="date num">'+fmtDate(g.date,true)+'</span></div>'+side(g.g)+'</div>'+
+      '<div class="versus">'+side(g.h)+'<div class="vsmid">'+(isLive(g)?liveTag():'<span class="count">'+(days<=0?"Heute":days===1?"Morgen":"in "+days+" Tagen")+'</span>')+'<span class="when num">'+g.time+'</span><span class="date num">'+fmtDate(g.date,true)+'</span></div>'+side(g.g)+'</div>'+
       (function(){var ts=LEAGUE.goals.filter(function(x){return x[0]===o;}).sort(function(a,b){return b[3]-a[3];}).slice(0,3);
         return ts.length?'<div class="watch"><span class="lbl">Aufpassen auf</span>'+ts.map(function(x){return '<span>'+nrTag(o,x[1])+pLink(o,x[1])+' <span class="muted">'+x[3]+' Tore</span></span>';}).join("")+'</div>':'';})()+
       '<div class="matchfoot"><span>'+esc(hallName(g.hall))+(hallAddr(g.hall)?'<br><span class="muted small">'+esc(hallAddr(g.hall))+'</span>':'')+'</span>'+
@@ -1014,11 +1037,11 @@ function viewSpielplan(){
   var h='<div class="grid"><section class="card c12"><div class="toolbar" style="justify-content:space-between"><h2>Spielplan</h2><div class="seg" role="group" aria-label="Filter"><button data-act="planOwn" aria-pressed="'+!ui.planAll+'">Unsere Spiele</button><button data-act="planAll" aria-pressed="'+ui.planAll+'">Ganze Liga</button></div></div>'+
     (editing?'<div class="note">Ergebnisse kommen jeden Abend automatisch aus nuLiga. Wer nicht warten will, trägt hier ein Ergebnis vorab ein. Sobald nuLiga es hat, gilt das offizielle.</div>':'')+
     (editing?'':'<div class="plan-list show-sm">'+(function(){var last="",o="";list.forEach(function(m){var mine=m.h==="ALT"||m.g==="ALT",oc=mine?outcome(m,"ALT"):null;if(m.date!==last){o+='<div class="day">'+fmtDate(m.date,true)+'</div>';last=m.date;}
-      o+='<div class="li"'+(m.played?' data-game="'+m.nr+'" tabindex="0" role="button"':'')+(mine&&ui.planAll?' style="background:var(--row-hl);border-radius:8px;padding:8px 6px"':'')+'><span class="h">'+esc(TEAMS[m.h])+'</span><span class="num">'+(m.played?'<span class="score num '+(oc||"")+'" style="font-size:1.05rem;min-width:0">'+m.hg+':'+m.ag+'</span>':'<span class="small muted">'+m.time+'</span>')+'</span><span class="g">'+esc(TEAMS[m.g])+'</span></div>';});return o;})()+'</div>')+
+      o+='<div class="li"'+(m.played?' data-game="'+m.nr+'" tabindex="0" role="button"':'')+(mine&&ui.planAll?' style="background:var(--row-hl);border-radius:8px;padding:8px 6px"':'')+'><span class="h">'+esc(TEAMS[m.h])+'</span><span class="num">'+(m.played?'<span class="score num '+(oc||"")+'" style="font-size:1.05rem;min-width:0">'+m.hg+':'+m.ag+'</span>':(isLive(m)?liveTag():'<span class="small muted">'+m.time+'</span>'))+'</span><span class="g">'+esc(TEAMS[m.g])+'</span></div>';});return o;})()+'</div>')+
     '<div class="table-wrap'+(editing?'':' hide-sm')+'"><table><thead><tr><th>Datum</th><th>Zeit</th><th>Heim</th><th>Gast</th><th class="c">Ergebnis</th><th>Halle</th></tr></thead><tbody>'+
     list.map(function(m){var mine=m.h==="ALT"||m.g==="ALT",oc=mine?outcome(m,"ALT"):null,res;
       if(editing&&!m.league)res='<input type="number" min="0" id="r'+m.nr+'h" data-m="'+m.nr+'" data-side="0" value="'+(m.hg==null?"":m.hg)+'" aria-label="Tore Heim"> : <input type="number" min="0" id="r'+m.nr+'g" data-m="'+m.nr+'" data-side="1" value="'+(m.ag==null?"":m.ag)+'" aria-label="Tore Gast">';
-      else res=m.played?'<span class="score num '+(oc||"")+'" data-game="'+m.nr+'" tabindex="0" role="button" title="Spielverlauf anzeigen" style="font-size:1.05rem">'+m.hg+':'+m.ag+'</span>'+(m.own?'<sup title="vorab selbst eingetragen">*</sup>':''):'<span class="muted">–</span>';
+      else res=m.played?'<span class="score num '+(oc||"")+'" data-game="'+m.nr+'" tabindex="0" role="button" title="Spielverlauf anzeigen" style="font-size:1.05rem">'+m.hg+':'+m.ag+'</span>'+(m.own?'<sup title="vorab selbst eingetragen">*</sup>':''):(isLive(m)?liveTag():'<span class="muted">–</span>');
       return '<tr class="'+(mine&&ui.planAll?"hl":"")+'"><td class="num">'+fmtDate(m.date,true)+'</td><td class="num">'+m.time+'</td><td>'+esc(TEAMS[m.h])+'</td><td>'+esc(TEAMS[m.g])+'</td><td class="c num">'+res+'</td><td>'+
         (mapsLink(m.hall)?'<a href="'+mapsLink(m.hall)+'">'+esc(hallName(m.hall))+'</a>':esc(hallName(m.hall)))+'</td></tr>';}).join("")+
     '</tbody></table></div><div class="hint">Hallenname anklicken öffnet die Anfahrt. Verlegungen übernimmt die Seite beim nächsten automatischen Abgleich mit nuLiga.</div></section></div>';
