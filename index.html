@@ -303,13 +303,31 @@ svg text{fill:var(--muted);font-family:var(--body)}
 .live{display:inline-flex;align-items:center;gap:6px;background:var(--red);color:#fff!important;font-weight:800;border-radius:999px;padding:3px 11px;font-size:.78rem;text-decoration:none;letter-spacing:.06em;white-space:nowrap}
 .live::before{content:"";width:8px;height:8px;border-radius:50%;background:#fff;animation:lp 1.2s ease-in-out infinite}
 @keyframes lp{0%,100%{opacity:1}50%{opacity:.25}}
-.live-banner{background:var(--red);color:#fff;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
-.live-banner a{color:#fff}
-.lt-wrap{background:#fff;border-radius:10px;overflow:hidden}
-.lt{display:block;width:100%;height:620px;border:0}
-@media (max-width:640px){.lt{height:520px}}
-.live-banner .lg{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:center;background:rgba(255,255,255,.12);border-radius:10px;padding:8px 12px;font-weight:600}
-.live-banner .lg .tk{background:#fff;color:var(--red);border-radius:999px;padding:4px 12px;font-weight:800;text-decoration:none;font-size:.85rem}
+.lc{background:var(--surface);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+.lc-head{order:1;background:linear-gradient(135deg,var(--red),var(--red-deep));color:#fff;padding:12px 16px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px}
+.lc-head h2{font-size:1.4rem;color:#fff}
+.lc-grid{order:2;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;padding:14px}
+.lc-card{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px;background:var(--surface)}
+.lc-card.lc-me{border:2px solid var(--red);background:var(--red-soft)}
+.lc-card.lc-live{box-shadow:0 0 0 3px color-mix(in srgb,var(--red) 25%,transparent)}
+.lc-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.85rem}
+.lc-chip{background:var(--ink);color:var(--surface);border-radius:999px;padding:2px 10px;font-weight:700;font-size:.78rem}
+.lc-time{color:var(--muted);font-variant-numeric:tabular-nums}
+.lc-teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;text-align:center}
+.lc-t{display:flex;flex-direction:column;align-items:center;gap:3px;line-height:1.15}
+.lc-t .ini{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--bg);font-family:var(--display);font-weight:800;font-size:.95rem}
+.lc-me .lc-t .ini{background:#fff}
+.lc-t b{font-size:.92rem}.lc-t small{color:var(--muted);font-size:.75rem}
+.lc-vs{font-family:var(--display);font-weight:700;color:var(--muted)}
+.lc-info{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.82rem}
+.lc-info .lbl{display:block;font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+.lc-foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:.78rem;color:var(--muted);border-top:1px solid var(--line);padding-top:8px}
+.lc-ticker{order:3;padding:0 14px 14px;display:flex;flex-direction:column;gap:8px}
+.lc-th{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
+.lc-th .btn{margin-left:auto}
+.lt-wrap{background:#fff;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+.lt{display:block;width:100%;height:640px;border:0}
+@media (max-width:640px){.lc-ticker{order:2;padding-top:10px}.lc-grid{order:3}.lt{height:540px}.lc-grid{padding:10px;grid-template-columns:1fr}.lc-ticker{padding:0 10px 10px}}
 footer{max-width:1180px;margin:0 auto;padding:0 16px 32px;color:var(--muted);font-size:.85rem}
 @media (max-width:520px){.brand h1{font-size:1.6rem}.crest{width:46px;height:46px;font-size:1rem}.side .nm{font-size:1.05rem}.vsmid .when{font-size:1.9rem}.side .ini{width:48px;height:48px;font-size:1.1rem}.podium{grid-template-columns:1fr}}
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
@@ -864,15 +882,52 @@ function viewVorberichtBody(g,c,r,me,home,days,sc,tot){
 /* ---------- Live ---------- */
 var TICKER="https://hbde-live.liga.nu/nuScoreLive/#/groups/489649";
 function isLive(m){if(m.played)return false;var t=dt(m).getTime(),n=Date.now();return n>=t-10*60e3&&n<=t+130*60e3;}
-function liveTag(){return '<a class="live" href="#live" title="Liveticker anzeigen">LIVE</a>';}
+function liveTag(){return '<a class="live" href="#live" title="Zum Live-Center">LIVE</a>';}
 function liveGames(){return matches().filter(isLive);}
-function liveBanner(){var L=liveGames();if(!L.length)return '';
-  return '<section class="c12 live-banner" id="live"><div class="eyebrow" style="color:#fff;opacity:.9">● Gerade live</div>'+L.map(function(m){var me=m.h==="ALT"||m.g==="ALT";
-    return '<div class="lg"'+(me?' style="background:rgba(255,255,255,.25)"':'')+'><span>'+esc(TEAMS[m.h])+' – '+esc(TEAMS[m.g])+' <span style="opacity:.8;font-weight:400">· '+m.time+' Uhr</span></span></div>';}).join("")+
-    '<div class="lt-wrap"><iframe class="lt" src="'+TICKER+'" title="nuLiga-Liveticker" loading="lazy"></iframe></div>'+
-    '<div class="small" style="opacity:.85">Offizieller nuLiga-Liveticker der Liga, aktualisiert sich von selbst. Im Fenster nach unten scrollen zu den heutigen Spielen. Zahlen gibt es nur, wenn der Heimverein live erfasst. Endergebnis und Statistiken erscheinen hier am Abend.</div></section>';}
+function embedOK(){return typeof PUBLIC!=="undefined"&&PUBLIC;}
+function todayISO(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+/* Status eines Spiels am Spieltag: pre (heute, vor Anpfiff), live, post (beendet, Ergebnis folgt) */
+function dayState(m){if(m.played||m.date!==todayISO())return null;var t=dt(m).getTime(),n=Date.now();
+  if(n<t-10*60e3)return "pre";if(n<=t+130*60e3)return "live";return "post";}
+function sinceTxt(m){var mins=Math.max(0,Math.floor((Date.now()-dt(m).getTime())/60e3));return mins<1?"Anpfiff gleich":"seit "+mins+" Min. angepfiffen";}
+function untilTxt(m){var mins=Math.max(0,Math.round((dt(m).getTime()-Date.now())/60e3));return mins>=60?"in "+Math.floor(mins/60)+" Std. "+(mins%60?(mins%60)+" Min.":""):"in "+mins+" Min.";}
+function lcCard(m){
+  var st=dayState(m),me=m.h==="ALT"||m.g==="ALT",rh=row(m.h),rg=row(m.g);
+  function top(t){var x=LEAGUE.goals.filter(function(y){return y[0]===t;}).sort(function(a,b){return b[3]-a[3];})[0];return x?nrTag(t,x[1])+pLink(t,x[1])+' <span class="muted">'+x[3]+' Tore</span>':'';}
+  var duel=matches().filter(function(x){return x.played&&((x.h===m.h&&x.g===m.g)||(x.h===m.g&&x.g===m.h));})[0];
+  var chip=st==="live"?'<span class="live" style="pointer-events:none">LIVE</span> <span class="lc-time" data-since="'+m.nr+'">'+sinceTxt(m)+'</span>':
+    st==="pre"?'<span class="lc-chip">Heute '+m.time+' Uhr</span> <span class="lc-time" data-until="'+m.nr+'">'+untilTxt(m)+'</span>':
+    '<span class="lc-chip">Beendet</span> <span class="lc-time">Endergebnis kommt heute Abend</span>';
+  return '<div class="lc-card'+(me?' lc-me':'')+(st==="live"?' lc-live':'')+'">'+
+    '<div class="lc-top">'+chip+'</div>'+
+    '<div class="lc-teams"><div class="lc-t"><span class="ini">'+INI[m.h]+'</span><b>'+esc(TEAMS[m.h])+'</b><small>Platz '+rh.rank+' · '+rh.pp+':'+rh.pm+'</small></div>'+
+    '<div class="lc-vs">vs.</div>'+
+    '<div class="lc-t"><span class="ini">'+INI[m.g]+'</span><b>'+esc(TEAMS[m.g])+'</b><small>Platz '+rg.rank+' · '+rg.pp+':'+rg.pm+'</small></div></div>'+
+    '<div class="lc-info"><div><span class="lbl">Gefährlichste</span>'+top(m.h)+'</div><div><span class="lbl">Gefährlichste</span>'+top(m.g)+'</div></div>'+
+    '<div class="lc-foot"><span>'+(/^Halle \d+$/.test(hallName(m.hall))?'':esc(hallName(m.hall)))+'</span>'+(duel?'<span>Hinspiel: <button type="button" class="gm-link" data-game="'+duel.nr+'">'+esc(INI[duel.h])+' '+duel.hg+':'+duel.ag+' '+esc(INI[duel.g])+'</button></span>':'')+'</div></div>';
+}
+function liveBanner(){
+  var T=matches().filter(function(m){return dayState(m);});if(!T.length)return '';
+  T.sort(function(a,b){var ma=(a.h==="ALT"||a.g==="ALT")?0:1,mb=(b.h==="ALT"||b.g==="ALT")?0:1;return ma-mb||(a.date+a.time).localeCompare(b.date+b.time);});
+  var anyLive=T.some(function(m){return dayState(m)==="live";}),showTicker=T.some(function(m){var s=dayState(m);return s==="live"||s==="post";});
+  var h='<section class="c12 lc" id="live"><div class="lc-head"><h2>'+(anyLive?'Live-Center':'Heute im Spiel')+'</h2><span class="small">'+T.length+(T.length===1?' Spiel':' Spiele')+' heute · '+fmtDate(todayISO(),true)+'</span></div>'+
+    '<div class="lc-grid">'+T.map(lcCard).join("")+'</div>';
+  if(showTicker){
+    h+=embedOK()?
+      '<div class="lc-ticker"><div class="lc-th"><b>Spielstände und Tore live</b><span class="small muted">Offizieller nuLiga-Liveticker · aktualisiert sich selbst</span><button class="btn" data-act="tkFull">Groß anzeigen</button></div>'+
+      '<div class="lt-wrap"><iframe class="lt" id="ltFrame" src="'+TICKER+'" title="nuLiga-Liveticker" loading="lazy"></iframe></div>'+
+      '<div class="small muted">Im Ticker nach unten scrollen: Erst kommt der letzte Spieltag, darunter die Spiele von heute. Spielstände gibt es, wenn der Heimverein live erfasst.</div></div>'
+      :'<div class="lc-ticker"><a class="btn primary" href="'+TICKER+'" target="_blank" rel="noopener">Spielstände im nuLiga-Liveticker</a></div>';
+  }
+  return h+'</section>';
+}
+function tickerFull(){showModal('<div class="gm-head" style="padding:12px 16px"><button class="gm-close" data-act="gmClose" aria-label="Schließen">✕</button><div class="eyebrow">Liveticker · Regionsoberliga Frauen Nord</div></div><iframe src="'+TICKER+'" title="nuLiga-Liveticker" style="width:100%;height:calc(100vh - 110px);border:0;display:block;background:#fff"></iframe>',"Liveticker");}
+function lcKey(){return matches().map(function(m){return m.nr+":"+(dayState(m)||"");}).join(",");}
 var lastLiveKey=null;
-setInterval(function(){var k=liveGames().map(function(m){return m.nr;}).join(",");if(lastLiveKey!==null&&k!==lastLiveKey&&!document.getElementById("gmWrap")){var y=window.scrollY;render();window.scrollTo(0,y);}lastLiveKey=k;},60000);
+setInterval(function(){
+  document.querySelectorAll("[data-since]").forEach(function(el){var m=matches().filter(function(x){return x.nr===el.getAttribute("data-since");})[0];if(m)el.textContent=sinceTxt(m);});
+  document.querySelectorAll("[data-until]").forEach(function(el){var m=matches().filter(function(x){return x.nr===el.getAttribute("data-until");})[0];if(m)el.textContent=untilTxt(m);});
+  var k=lcKey();if(lastLiveKey!==null&&k!==lastLiveKey&&!document.getElementById("gmWrap")){var y=window.scrollY;render();window.scrollTo(0,y);}lastLiveKey=k;},30000);
 function trainingPct(name){var n=state.trainings.length;if(!n)return null;var c=state.trainings.filter(function(t){return t.present.indexOf(name)>=0;}).length;return Math.round(c*100/n);}
 
 /* ---------- Bausteine ---------- */
@@ -1082,6 +1137,7 @@ document.addEventListener("click",function(e){
   else if(a==="planAll"){ui.planAll=true;render();}
   else if(a==="vbCopy"||a==="vbLink"){var gx=nextGame(),txt=a==="vbCopy"?vbText(opp(gx,"ALT"),gx)+"\nMehr: "+location.href.split("#")[0]+"#vorbericht":location.href.split("#")[0]+"#vorbericht",mg=document.getElementById("vbMsg");
     try{navigator.clipboard.writeText(txt).then(function(){mg.textContent="Kopiert.";},function(){mg.textContent="Kopieren nicht möglich. Bitte Text markieren und kopieren.";});}catch(er){mg.textContent="Kopieren nicht möglich.";}}
+  else if(a==="tkFull"){tickerFull();}
   else if(a==="vbPrint"){try{window.print();}catch(er){}}
   else if(a==="spPrev"){ui.sp--;render();}
   else if(a==="spNext"){ui.sp++;render();}
